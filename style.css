@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+body {
+    background: #E5E5E5;
+    font-family: 'Roboto', sans-serif;
+}
+
+.search-panel {
+    background: #C4C4C4;
+    margin: 30px auto;
+    padding: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: fit-content;
+}
+
+.search-panel__input {
+    width: 500px;
+    height: 60px;
+    border: none;
+    outline: none;
+    font-size: 48px;
+    line-height: 56px;
+    padding: 5px 12px;
+}
+
+.autocomplete-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 500px;
+    max-height: 250px;
+    visibility: visible;
+    opacity: 1;
+}
+
+.autocomplete-list--hidden {
+    max-height: 0px;
+    visibility: hidden;
+    opacity: 0;
+}
+
+.autocomplete__item {
+    width: 100%;
+    background: #E3E3E3;
+    border: 2px solid #000000;
+    box-sizing: border-box;
+    font-size: 30px;
+    padding: 5px 12px;
+    min-height: 44px;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.autocomplete__item:hover {
+    background: #65CDF9;
+}
+
+.repository-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 500px;
+    margin-top: 50px;
+}
+
+.repository-list li {
+    display: flex;
+    justify-content: space-between;
+    background: #E27BEB;
+    border: 1px solid #000000;
+    min-height: 100px;
+    font-size: 24px;
+    line-height: 28px;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    align-items: center;
+}
+
+.repository-list div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.repository-list li p {
+    margin: 0;
+    padding: 0;
+}
+
+.close {
+    background: url('close.svg');
+    width: 45px;
+    height: 40px;
+    cursor: pointer;
+}
