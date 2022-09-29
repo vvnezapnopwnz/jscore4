@@ -4,53 +4,65 @@ const autocompleteField = document.querySelector('.autocomplete-list');
 const repositories = document.querySelector('.repository-list');
 
 function debounce(func, wait, immediate) {
-    var timeout;
+    let timeout;
     return function() {
-        var context = this, args = arguments;
-        var later = function() {
+        const context = this, args = arguments;
+        const later = function() {
             timeout = null;
             if (!immediate) func.apply(context, args);
         };
-        var callNow = immediate && !timeout;
+        const callNow = immediate && !timeout;
         clearTimeout(timeout);
         timeout = setTimeout(later, wait);
         if (callNow) func.apply(context, args);
     };
 };
 
-const removeRepo = (e) => {
-    e.parentElement.remove();
+const removeRepo = (event) => {
+    event.parentElement.remove();
 }
-const saveToRepostoryList = (e, item) => {
+const saveToRepostoryList = (liItem) => {
     autocompleteField.innerHTML = '';
     autocompleteField.classList.add('autocomplete-list--hidden');
     searchInput.value = ''
     const repositoryItem = document.createElement('li')
-    repositoryItem.insertAdjacentHTML('afterbegin',`<div><p>${item.name}</p>
-    <p>${item.owner.login}</p><p>${item.stargazers_count}</p></div><i class="close" onclick="removeRepo(this)"></i>`);
+    repositoryItem.insertAdjacentHTML('afterbegin',`<div><p>Name: ${liItem.name}</p>
+    <p>Owner: ${liItem.owner.login}</p><p>Stars:${liItem.stargazers_count}</p></div><i class="close" onclick="removeRepo(this)"></i>`);
     repositories.appendChild(repositoryItem);
 }
-const inputEventCb = async (e) => {
-    if(e.target.value.length !== 0) {
+const inputEventCb = async (event) => {
+    if(event.target.value.length !== 0) {
         try {
-            let query = await fetch(`${searchURL}?q=${e.target.value}&per_page=5`);
+            let query = await fetch(`${searchURL}?q=${event.target.value}&per_page=5`);
             const queryResult = await query.json();
             autocompleteField.innerHTML = '';
             autocompleteField.classList.remove('autocomplete-list--hidden');
-            queryResult.items.forEach(item => {
+            if(queryResult.items.length !== 0) {
+                queryResult.items.forEach(queryItem => {
+                    const liItem = document.createElement('li');
+                    liItem.innerText = queryItem.name;
+                    liItem.classList.add('autocomplete__item');
+                    liItem.addEventListener('click', {
+                        handleEvent() {
+                            saveToRepostoryList(queryItem);
+                          }
+                    })
+                    autocompleteField.appendChild(liItem);
+                });
+            } else {
                 const liItem = document.createElement('li');
-                liItem.innerText = item.name;
+                liItem.innerText = 'Not found';
                 liItem.classList.add('autocomplete__item');
-                liItem.addEventListener('click', {
-                    handleEvent(event) {
-                        saveToRepostoryList(event, item);
-                      }
-                })
                 autocompleteField.appendChild(liItem);
-            });
-        } catch (err) {
-            throw new Error(err.message);
+            }
+
+
+        } catch (error) {
+            throw new Error(error.message);
         }
+    } else {
+        autocompleteField.innerHTML = '';
+        autocompleteField.classList.add('autocomplete-list--hidden');
     }
 }
 
